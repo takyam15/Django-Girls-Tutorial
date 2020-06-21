@@ -1,13 +1,25 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
     {% for post in post_list %}
+
         <div class="post">
+
             <div class="date">
                 {{ post.published_date }}
             </div>
+
             <h2><a href="{% url 'blog:post_detail' slug=post.slug %}">{{ post.title }}</a></h2>
+
             <p>{{ post.text | linebreaksbr | urlize }}</p>
+
         </div>
+
+    {% empty %}
+
+        <p>No posts are displayed. </p>
+
     {% endfor %}
+
 {% endblock %}
