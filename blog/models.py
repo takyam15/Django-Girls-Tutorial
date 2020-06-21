@@ -11,7 +11,7 @@ class Author(AbstractUser):
 class Post(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     title = models.CharField('title', max_length=200)
-    slug = models.SlugField('slug')
+    slug = models.SlugField('slug', unique=True)
     text = models.TextField('text')
     created_date = models.DateTimeField('created_date', auto_now_add=True)
     published_date = models.DateTimeField('published_date', blank=True, null=True)

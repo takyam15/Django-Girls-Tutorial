@@ -23,7 +23,7 @@ app_name = 'blog'
 urlpatterns = [
     path('', PostList.as_view(), name='post_list'),
     path('post/new/', PostCreate.as_view(), name='post_new'),
-    path('post/<slug:slug>/', PostDetail.as_view(), name='post_detail'),
-    path('post/<slug:slug>/edit/', PostUpdate.as_view(), name='post_edit'),
-    path('post/<slug:slug>/delete', PostDelete.as_view(), name='post_delete'),
+    path('post/detail/<slug:slug>/', PostDetail.as_view(), name='post_detail'),
+    path('post/edit/<slug:slug>/', PostUpdate.as_view(), name='post_edit'),
+    path('post/delete/<slug:slug>/', PostDelete.as_view(), name='post_delete'),
 ]
