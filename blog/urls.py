@@ -1,4 +1,4 @@
-"""config URL Configuration
+"""blog URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.2/topics/http/urls/
@@ -13,17 +13,17 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.conf import settings
-from django.conf.urls.static import static
-from django.contrib import admin
-from django.urls import include, path
+from django.urls import path
 
+from .views import (
+    PostList, PostDetail, PostCreate, PostUpdate, PostDelete
+)
+
+app_name = 'blog'
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('blog.urls'))
+    path('', PostList.as_view(), name='post_list'),
+    path('post/new/', PostCreate.as_view(), name='post_new'),
+    path('post/<slug:slug>/', PostDetail.as_view(), name='post_detail'),
+    path('post/<slug:slug>/edit/', PostUpdate.as_view(), name='post_edit'),
+    path('post/<slug:slug>/delete', PostDelete.as_view(), name='post_delete'),
 ]
-
-if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-    # urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    

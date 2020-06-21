@@ -21,5 +21,8 @@ class Post(models.Model):
         self.published_date = timezone.now()
         self.save()
 
+    class Meta:
+        ordering = ('-published_date',)
+
     def __str__(self):
         return self.title
