@@ -1,4 +1,4 @@
-from django.shortcuts import redirect
+from django.shortcuts import redirect, resolve_url
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic import (
@@ -38,7 +38,9 @@ class PostUpdate(UpdateView):
     model = Post
     form_class = PostForm
     template_name = 'blog/post_edit.html'
-    success_url = reverse_lazy('blog:post_list')
+    
+    def get_success_url(self):
+        return resolve_url('blog:post_detail', slug=self.kwargs['slug'])
 
 
 class PostDelete(DeleteView):
