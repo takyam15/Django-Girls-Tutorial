@@ -116,6 +116,10 @@ class PostUpdateTests(TestCase):
         res = self.client.get(reverse('blog:post_edit', kwargs={'slug': 'sample-post'}))
         self.assertTemplateUsed(res, 'blog/post_edit.html')
 
+    def test_get_non_existent_post_form(self):
+        res = self.client.get(reverse('blog:post_edit', kwargs={'slug': 'non-existent'}))
+        self.assertEqual(res.status_code, 404)
+
     def test_update_post(self):
         post = PostFactory(
             title='Sample post',
@@ -132,27 +136,6 @@ class PostUpdateTests(TestCase):
         post.refresh_from_db()
         self.assertEqual(Post.objects.count(), 1)
         self.assertEqual(post.text, 'This text has been updated.')
-
-    def test_update_post_slug(self):
-        post = PostFactory(
-            title='Sample post',
-            slug='sample-post',
-            text='This is the original text.'
-        )
-        updated_post = {
-            'title': 'Sample post',
-            'slug': 'sample-post',
-            'text': 'This text has been updated.'
-        }
-        res = self.client.post(reverse('blog:post_edit', kwargs={'slug': 'sample-post'}), data=updated_post)
-        self.assertRedirects(res, reverse('blog:post_list'))
-        post.refresh_from_db()
-        self.assertEqual(Post.objects.count(), 1)
-        self.assertEqual(post.text, 'This text has been updated.')
-
-    def test_get_non_existent_post_form(self):
-        res = self.client.get(reverse('blog:post_edit', kwargs={'slug': 'non-existent'}))
-        self.assertEqual(res.status_code, 404)
 
     def test_update_non_existent_post(self):
         res = self.client.post(reverse('blog:post_edit', kwargs={'slug': 'non-existent'}))
