@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, resolve_url
 from django.urls import reverse_lazy
 from django.utils import timezone
@@ -21,29 +22,28 @@ class PostDetail(DetailView):
     template_name = 'blog/post_detail.html'
 
 
-class PostCreate(CreateView):
+class PostCreate(LoginRequiredMixin, CreateView):
     model = Post
     form_class = PostForm
     template_name = 'blog/post_edit.html'
+    success_url = reverse_lazy('blog:post_list')
 
     def form_valid(self, form):
         post = form.save(commit=False)
         post.author = self.request.user
         post.published_date = timezone.now()
         post.save()
-        return redirect('blog:post_detail', slug=post.slug)
+        return super().form_valid(form)
 
 
-class PostUpdate(UpdateView):
+class PostUpdate(LoginRequiredMixin, UpdateView):
     model = Post
     form_class = PostForm
     template_name = 'blog/post_edit.html'
-    
-    def get_success_url(self):
-        return resolve_url('blog:post_detail', slug=self.kwargs['slug'])
+    success_url = reverse_lazy('blog:post_list')
 
 
-class PostDelete(DeleteView):
+class PostDelete(LoginRequiredMixin, DeleteView):
     model = Post
     template_name = 'blog/post_delete.html'
     success_url = reverse_lazy('blog:post_list')
